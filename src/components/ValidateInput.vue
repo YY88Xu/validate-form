@@ -9,7 +9,7 @@
 </template>
 <script lang="ts">
 import { emitter } from './ValidateForm.vue'
-import { defineComponent, reactive, PropType, onMounted } from 'vue'
+import { defineComponent, reactive, PropType, onMounted, watch } from 'vue'
 const emailReg = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
 
 interface RuleProp{
@@ -35,6 +35,9 @@ export default defineComponent({
             inputRef.val = targetValue
             context.emit('update:modelValue', targetValue)
         }
+        watch(() => props.modelValue, (newVal) => {
+            inputRef.val = newVal as string
+        })
         const validateInput = () => {
             if (props.rules) {
                 const allPassed: boolean = props.rules.every((rule: RuleProp) => {
